@@ -53,7 +53,7 @@ function Signup() {
     }
   }
   return (
-    <div className="min-h-screen bg-[#1f1f1f] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[#121212] flex items-center justify-center px-4">
       <div className="bg-[#2a2a2a] shadow-2xl rounded-xl p-10 w-full max-w-md border border-[#444]">
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold text-[#f4f4f5]">Create an account</h1>

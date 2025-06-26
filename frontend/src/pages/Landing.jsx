@@ -1,20 +1,39 @@
 import { Typewriter } from "react-simple-typewriter";
 
 function Landing() {
+  const keywords = [
+    "Breaking News", "World", "Economy", "Tech", "Sports", "Headlines",
+    "Weather", "Real-Time", "Trending", "Exclusive", "Politics", "Health", "Business", "Updates"
+  ];
+
   return (
-    <div className="min-h-[calc(100vh-88px)] bg-[#0D0D0D] text-white relative overflow-hidden flex items-center justify-center">
-      {/* Background texture */}
-      <div className="absolute inset-0 opacity-[0.05] text-white pointer-events-none select-none font-mono text-[12px] leading-loose z-0 whitespace-pre-wrap p-10">
-        {Array(40)
-          .fill(
-            "Breaking News | World | Economy | Tech | Sports | Headlines | Weather | Real-Time Updates | Trending Now | Exclusive"
-          )
-          .join(" — ")}
+    <div className="h-screen top-0 bg-[#121212] text-white relative overflow-hidden flex items-center justify-center m-0 p-0">
+      {/* Background texture with improved contrast */}
+      <div className="absolute inset-0 z-0 pointer-events-none select-none p-6 flex flex-wrap gap-2">
+        {Array.from({ length: 100 }).map((_, i) => {
+          const word = keywords[Math.floor(Math.random() * keywords.length)];
+          const size = Math.floor(Math.random() * 8) + 22; // 14px to 22px
+          const opacity = (Math.random() * 0.2 + 0.1).toFixed(2); // 0.1 to 0.3
+
+          return (
+            <span
+              key={i}
+              className="font-mono whitespace-nowrap"
+              style={{
+                fontSize: `${size}px`,
+                opacity,
+                color: `rgba(255, 255, 255, ${opacity})`,
+              }}
+            >
+              {word}
+            </span>
+          );
+        })}
       </div>
 
       {/* Main content */}
-      <div className="relative z-10 text-center max-w-3xl">
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 text-red-500">
+      <div className="relative z-10 text-center max-w-3xl px-4">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 text-[#b91c1c]">
           Stay Ahead of the Headlines
         </h1>
 

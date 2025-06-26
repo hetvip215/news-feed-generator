@@ -2,6 +2,18 @@ import mongoose from "mongoose";
 import jwt from "jsonwebtoken"
 import bcrypt from "bcryptjs"
 
+const keywordSchema = new mongoose.Schema({
+    word: { type: String, required: true },
+    count: { type: Number, default: 1 },
+  });
+  
+  // Sub-schema for article click history
+const clickedArticleSchema = new mongoose.Schema({
+    url: String,
+    title: String,
+    clickedAt: { type: Date, default: Date.now },
+});
+
 const userSchema=new mongoose.Schema({
     username : {
         type: String,
@@ -16,9 +28,14 @@ const userSchema=new mongoose.Schema({
         type: String,
         required: true
     },
-    keyword :{
-        type:[String],
-        default:[]
+    keywords: {
+        type: [keywordSchema],
+        default: [],
+      },
+  
+    clickedArticles: {
+        type: [clickedArticleSchema],
+        default: [],
     },
     refreshToken: {
         type: String

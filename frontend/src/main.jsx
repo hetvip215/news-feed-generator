@@ -17,6 +17,7 @@ import Landing from './pages/Landing.jsx'
 import { AuthProvider } from './context/AuthContext'
 import PrivateRoute from './components/PrivateRoute'
 import 'react-toastify/dist/ReactToastify.css'
+import Profile from './pages/Profile.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -32,6 +33,7 @@ const router = createBrowserRouter(
       />
       <Route path='login' element={<Login />} />
       <Route path='signup' element={<Signup />} />
+      <Route path='profile' element={<Profile />} />
     </Route>
   )
 )
