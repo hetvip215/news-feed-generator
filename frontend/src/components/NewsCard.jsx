@@ -1,6 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const NewsCard = ({ article, onClick }) => {
+const NewsCard = ({ article }) => {
+  const navigate = useNavigate();
+
   const {
     title,
     description,
@@ -10,9 +13,13 @@ const NewsCard = ({ article, onClick }) => {
     author,
   } = article;
 
+  const handleClick = () => {
+    navigate("/article", { state: { article } });
+  };
+
   return (
     <div
-      onClick={() => onClick?.(article)}
+      onClick={handleClick}
       className="bg-white dark:bg-zinc-900 rounded-xl shadow hover:shadow-md transition cursor-pointer max-w-md w-full overflow-hidden"
     >
       {/* Image */}

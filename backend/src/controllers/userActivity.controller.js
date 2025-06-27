@@ -2,6 +2,24 @@ import { User } from "../models/user.model.js";
 import axios from "axios";
 import { extractKeywords } from "../utils/keywordExtractor.js"; // optional utility
 
+export const getUserActivity = async (req, res) => {
+    try {
+      const user = await User.findById(req.user._id).select("keywords clickedArticles");
+  
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+  
+      res.status(200).json({
+        keywords: user.keywords || [],
+        clickedArticles: user.clickedArticles || [],
+      });
+    } catch (error) {
+      console.error("Error fetching user activity:", error);
+      res.status(500).json({ message: "Failed to fetch activity", error: error.message });
+    }
+  };
+  
 // 1️⃣ Track search keyword
 export const trackSearch = async (req, res) => {
   const { keyword } = req.body;
@@ -29,37 +47,43 @@ export const trackSearch = async (req, res) => {
 
 // 2️⃣ Track clicked article
 export const trackArticleClick = async (req, res) => {
-  const { url, title, content } = req.body;
-  const userId = req.user._id;
-
-  if (!url || !title || !content) {
-    return res.status(400).json({ message: "Missing article data" });
-  }
-
-  try {
-    const keywords = extractKeywords(content); // Use your own keyword extractor
-    const user = await User.findById(userId);
-
-    // Update keywords
-    for (const word of keywords) {
-      const existing = user.keywords.find(k => k.word === word);
-      if (existing) {
-        existing.count += 1;
-      } else {
-        user.keywords.push({ word });
-      }
+    const { url, title, content } = req.body;
+    const userId = req.user._id;
+  
+    if (!url || !title || !content) {
+      return res.status(400).json({ message: "Missing article data" });
     }
-
-    // Save clicked article
-    user.clickedArticles.push({ url, title });
-
-    await user.save();
-
-    res.status(200).json({ message: "Click tracked and keywords updated" });
-  } catch (err) {
-    res.status(500).json({ message: "Error tracking click", error: err.message });
-  }
-};
+  
+    try {
+      
+      const keywords = extractKeywords(content);
+      
+  
+      const user = await User.findById(userId);
+  
+      for (const word of keywords) {
+        const existing = user.keywords.find(k => k.word === word);
+        if (existing) {
+          existing.count += 1;
+        } else {
+          user.keywords.push({ word });
+        }
+      }
+  
+      user.clickedArticles.push({ url, title });
+  
+      await user.save();
+  
+      res.status(200).json({ message: "Click tracked and keywords updated" });
+    } catch (err) {
+      //console.error("Error tracking click:", err); // <- log the full error
+      res.status(500).json({
+        message: "Error tracking click",
+        error: err.message,
+      });
+    }
+  };
+  
 
 // 3️⃣ Recommend articles based on top keywords
 export const getRecommendedArticles = async (req, res) => {

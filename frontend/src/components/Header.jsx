@@ -11,28 +11,36 @@ function Header() {
 
   const linkStyle = ({ isActive }) =>
     isActive
-      ? "text-[#ff3c3c] font-semibold transition"
-      : "text-white hover:text-[#ff3c3c] transition";
+      ? "text-[#b91c1c] font-semibold"
+      : "text-gray-300 hover:text-[#ff3c3c] transition-colors";
 
   return (
-    <div className="bg-[#121212] px-4 pt-4 sticky top-0 z-50">
-      <header className="bg-[#2a2a2a] border border-[#333] text-white px-8 py-3 flex justify-between items-center rounded-2xl shadow-lg max-w-6xl mx-auto">
-        <NavLink to="/" className="text-3xl font-bold text-[#b91c1c]">
-          NewsBite
+    <div className="sticky top-0 z-50 backdrop-blur-md bg-black/80 border-b border-[#2d2d2d]">
+      <header className="max-w-6xl mx-auto flex justify-between items-center px-6 py-3 rounded-b-2xl">
+        {/* Logo */}
+        <NavLink
+            to="/"
+            className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white"
+            >
+            <span className="text-white">NewsBite</span>
+            <span className="text-[#b91c1c] text-5xl leading-none">.</span>
         </NavLink>
 
-        <nav className="flex gap-8 items-center text-lg">
+
+
+        {/* Navigation */}
+        <nav className="flex gap-6 sm:gap-8 items-center text-base sm:text-lg">
           {user ? (
             <>
               <NavLink to="/home" className={linkStyle}>
-                Browse News
+                Browse
               </NavLink>
               <NavLink to="/profile" className={linkStyle}>
                 Profile
               </NavLink>
               <button
                 onClick={handleLogout}
-                className="text-white hover:text-[#ff3c3c] transition"
+                className="text-gray-300 hover:text-[#b91c1c] transition-colors"
               >
                 Logout
               </button>
