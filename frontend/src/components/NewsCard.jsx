@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 const NewsCard = ({ article }) => {
   const navigate = useNavigate();
 
+  
   const {
     title,
     description,
@@ -13,8 +14,19 @@ const NewsCard = ({ article }) => {
     author,
   } = article;
 
+  const slug = title
+  .toLowerCase()
+  .replace(/[^a-z0-9\s-]/g, "")
+  .trim()
+  .replace(/\s+/g, "-");
+
   const handleClick = () => {
-    navigate("/article", { state: { article } });
+    navigate(`/article/${slug}`, {
+      state: {
+          article
+      }
+    });
+
   };
 
   return (

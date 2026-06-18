@@ -2,16 +2,17 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { ToastContainer } from "react-toastify";
 import NewsCard from "../components/NewsCard";
-import { useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 function Home() {
   const { user } = useContext(AuthContext);
   const [articles, setArticles] = useState([]);
   const [recommended, setRecommended] = useState([]);
-  const [query, setQuery] = useState("technology");
-  const [input, setInput] = useState("");
   const [loading, setLoading] = useState(true);
+  const [searchParams, setSearchParams] = useSearchParams();
 
+  const query = searchParams.get("q") || "technology";
+  const [input, setInput] = useState(query);
   const fetchNews = async (searchQuery) => {
     setLoading(true);
     try {
@@ -44,23 +45,35 @@ function Home() {
   const handleSearch = async (e) => {
     e.preventDefault();
     if (input.trim()) {
-      setQuery(input.trim());
+      const newQuery = input.trim();
+      if (newQuery === query) return;
+      setSearchParams({
+          q: newQuery,
+      });
 
       // Track search
       await fetch("http://localhost:5000/api/v1/activity/track-search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ keyword: input.trim() }),
+        body: JSON.stringify({
+          keyword: newQuery,
+        }),
       });
     }
   };
 
   useEffect(() => {
     fetchNews(query);
-    fetchRecommendations();
   }, [query]);
 
+  useEffect(() => {
+    fetchRecommendations();
+  }, []);
+
+  useEffect(() => {
+    setInput(query);
+  }, [query]);
   return (
     <div className="p-4 min-h-screen bg-[#121212] text-white">
       <ToastContainer />
